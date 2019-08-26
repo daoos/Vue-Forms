@@ -103,24 +103,28 @@
 				left
 				bottom
 			>
-				<template v-slot:activator="{ on }">
-					<v-btn 
-            icon 
-            v-on="on">
-						<v-icon>mdi-dots-vertical</v-icon>
-					</v-btn>
+				<template v-slot:activator="{ on: menu }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on: tooltip }">
+    					<v-btn 
+                icon 
+                v-on="{ ...tooltip, ...menu }">
+    						  <v-icon>mdi-dots-vertical</v-icon>
+    					</v-btn>
+            </template>
+            <span class="tooltip">More</span>
+          </v-tooltip>
 				</template>
 
 				<v-list>
 					<v-list-item
-						v-for="n in 5"
-						:key="n"
-						@click="() => {}"
-					>
-          <v-list-item-icon>
-            <v-icon>mdi-undo</v-icon>
-          </v-list-item-icon>
-					<v-list-item-title>Option {{ n }}</v-list-item-title>
+						v-for="(option, index) in options"
+						:key="index"
+						@click="">
+            <v-list-item-icon>
+              <v-icon>{{ option.icon }}</v-icon>
+            </v-list-item-icon>
+  					<v-list-item-title>{{ option.name }}</v-list-item-title>
 					</v-list-item>
 				</v-list>
 			</v-menu>
@@ -141,7 +145,32 @@
 </template>
 
 <script>
-	
+	export default {
+    components: {
+
+    },
+    data() {
+      return {
+          options: [
+            { name: 'Undo', icon: 'mdi-undo'},
+            { name: 'Make a copy', icon: 'mdi-content-copy' },
+            { name: 'Move to trash', icon: 'mdi-delete' },
+            { name: 'Get pre-filled link', icon: 'mdi-link' },
+            { name: 'Print', icon: 'mdi-printer' },
+            { name: 'Add collaborators', icon: 'mdi-account-multiple-plus' },
+            { name: 'Script editor', icon: 'mdi-code-tags' },
+            { name: 'Add-ons', icon: 'mdi-puzzle' },
+            { name: 'Preferences', icon: 'mdi-account-settings' },
+          ]
+        }
+      },
+    computed: {
+
+    },
+    methods: {
+
+    }
+  }
 </script>
 
 <style scoped>

@@ -23,7 +23,7 @@
 				<v-container>
 					<v-row>
 						<v-col>
-							<v-text-field placeholder="Untitled form"/>
+							<v-text-field v-model="question.title"/>
 							<v-text-field placeholder="Form description" />
 						</v-col>
 					</v-row>
@@ -35,44 +35,86 @@
 				width="36">
 				<v-row>
 					<v-col>
-						<v-btn icon>
-							<v-icon>mdi-plus-circle</v-icon>
-						</v-btn>
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn 
+                  icon
+                  v-on="on">
+                  <v-icon>mdi-plus-circle</v-icon>
+                </v-btn>
+              </template>
+              <span class="tooltip">Add question</span>
+            </v-tooltip>
 					</v-col>
 				</v-row>
 				<v-row>
 					<v-col>
-						<v-btn icon>
-							<v-icon>mdi-import</v-icon>
-						</v-btn>
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn 
+                  icon
+                  v-on="on">
+                  <v-icon>mdi-import</v-icon>
+                </v-btn>
+              </template>
+              <span class="tooltip">Import questions</span>
+            </v-tooltip>
 					</v-col>
 				</v-row>
 				<v-row>
 					<v-col>
-						<v-btn icon>
-							<v-icon>mdi-format-title</v-icon>
-						</v-btn>
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn 
+                  icon
+                  v-on="on">
+                  <v-icon>mdi-format-title</v-icon>
+                </v-btn>
+              </template>
+              <span class="tooltip">Add title and description</span>
+            </v-tooltip>
 					</v-col>
 				</v-row>
 				<v-row>
 					<v-col>
-						<v-btn icon>
-							<v-icon>mdi-image</v-icon>
-						</v-btn>
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn 
+                  icon
+                  v-on="on">
+                  <v-icon>mdi-image</v-icon>
+                </v-btn>
+              </template>
+              <span class="tooltip">Add image</span>
+            </v-tooltip>
 					</v-col>
 				</v-row>
 				<v-row>
 					<v-col>
-						<v-btn icon>
-							<v-icon>mdi-youtube</v-icon>
-						</v-btn>
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn 
+                  icon
+                  v-on="on">
+                  <v-icon>mdi-youtube</v-icon>
+                </v-btn>
+              </template>
+              <span class="tooltip">Add video</span>
+            </v-tooltip>
 					</v-col>
 				</v-row>
 				<v-row>
 					<v-col>
-						<v-btn icon>
-							<v-icon>mdi-note-plus</v-icon>
-						</v-btn>
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn 
+                  icon
+                  v-on="on">
+                  <v-icon>mdi-note-plus</v-icon>
+                </v-btn>
+              </template>
+              <span class="tooltip">Add section</span>
+            </v-tooltip>
 					</v-col>
 				</v-row>
 			</v-card>
@@ -82,7 +124,19 @@
 </template>
 
 <script>
-	
+	export default {
+    components: {
+
+    },
+    data() {
+      return {
+        question: {
+          title: 'Untitled form',
+          description: '',
+        }
+      }
+    }
+  }
 </script>
 
 <style scoped>

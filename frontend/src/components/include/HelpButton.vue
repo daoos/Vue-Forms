@@ -1,8 +1,15 @@
 <template>
 	<div class="fixed-button">
-		<v-btn icon>
-			<v-icon>mdi-help-circle</v-icon>
-		</v-btn>
+    <v-tooltip left>
+      <template v-slot:activator="{ on }">
+        <v-btn 
+          icon
+          v-on="on">
+          <v-icon>mdi-help-circle</v-icon>
+        </v-btn>
+      </template>
+      <span class="tooltip">Help & feedback</span>
+    </v-tooltip>
 	</div>
 </template>
 

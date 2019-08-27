@@ -1,23 +1,23 @@
 <template>
-	<div>
-		<v-app-bar
-			color="deep-purple darken-1"
-			flat
-			dark
-			>
+  <div>
+    <v-app-bar
+      color="deep-purple darken-1"
+      flat
+      dark
+      >
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-    			<v-btn 
+          <v-btn 
             icon
             v-on="on">
-    				<v-icon>mdi-arrow-left</v-icon>
-    			</v-btn>
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn>
         </template>
         <span class="tooltip">Forms Home</span>
       </v-tooltip>
 
-			<v-toolbar-title class="font-weight-bold">Untitled form</v-toolbar-title>
+      <v-toolbar-title class="font-weight-bold">Untitled form</v-toolbar-title>
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -41,7 +41,7 @@
         <span class="tooltip">Star</span>
       </v-tooltip>
 
-			<v-tooltip bottom>
+      <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <span
             class="font-italic caption" 
@@ -53,15 +53,15 @@
         <span class="tooltip">Every change you make is automatically saved in Drive.</span>
       </v-tooltip>
 
-			<div class="flex-grow-1"></div>
+      <div class="flex-grow-1"></div>
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-			    <v-btn 
+          <v-btn 
             icon
             v-on="on">
-				    <v-icon>mdi-palette</v-icon>
-			    </v-btn>
+            <v-icon>mdi-palette</v-icon>
+          </v-btn>
         </template>
         <span class="tooltip">Customize Theme</span>
       </v-tooltip>
@@ -99,35 +99,35 @@
         <span class="tooltip">Send</span>
       </v-tooltip>
 
-			<v-menu
-				left
-				bottom
-			>
-				<template v-slot:activator="{ on: menu }">
+      <v-menu
+        left
+        bottom
+      >
+        <template v-slot:activator="{ on: menu }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltip }">
-    					<v-btn 
+              <v-btn 
                 icon 
                 v-on="{ ...tooltip, ...menu }">
-    						  <v-icon>mdi-dots-vertical</v-icon>
-    					</v-btn>
+                  <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
             </template>
             <span class="tooltip">More</span>
           </v-tooltip>
-				</template>
+        </template>
 
-				<v-list>
-					<v-list-item
-						v-for="(option, index) in options"
-						:key="index"
-						@click="">
+        <v-list>
+          <v-list-item
+            v-for="(option, index) in options"
+            :key="index"
+            @click="">
             <v-list-item-icon>
               <v-icon>{{ option.icon }}</v-icon>
             </v-list-item-icon>
-  					<v-list-item-title>{{ option.name }}</v-list-item-title>
-					</v-list-item>
-				</v-list>
-			</v-menu>
+            <v-list-item-title>{{ option.name }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -140,12 +140,12 @@
         <span class="tooltip">Google Account</span>
       </v-tooltip>
 
-		</v-app-bar>
-	</div>
+    </v-app-bar>
+  </div>
 </template>
 
 <script>
-	export default {
+  export default {
     components: {
 
     },

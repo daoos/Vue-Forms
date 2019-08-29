@@ -137,7 +137,8 @@
             <v-row>
               <v-col cols="8">
                 <v-text-field
-                  color="deep-purple darken-1" 
+                  color="deep-purple darken-1"
+                  placeholder="Question"
                   v-model="question.question">
                 </v-text-field>
               </v-col>
@@ -252,7 +253,7 @@
           description: '',
           questions: [
             {
-              question: 'Untitled question',
+              question: '',
               question_format: 'Multiple choices',
               question_icon: 'mdi-radiobox-marked',
               options: [
@@ -304,7 +305,7 @@
     methods: {
       addQuestion() {
         this.question.questions.push({
-            question: 'Untitled question',
+            question: '',
             question_format: 'Multiple choices',
             question_icon: 'mdi-radiobox-marked',
             options: [

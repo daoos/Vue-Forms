@@ -35,7 +35,7 @@
           <v-btn 
             icon
             v-on="on">
-            <v-icon>mdi-star-outline</v-icon>
+            <v-icon @click="starForm">{{ getStarIcon }}</v-icon>
           </v-btn>
         </template>
         <span class="tooltip">Star</span>
@@ -77,27 +77,9 @@
         <span class="tooltip">Preview</span>
       </v-tooltip>
 
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn 
-            icon
-            v-on="on">
-            <v-icon>mdi-settings</v-icon>
-          </v-btn>
-        </template>
-        <span class="tooltip">Settings</span>
-      </v-tooltip>
+      <DialogSettings />
 
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn 
-            icon
-            v-on="on">
-            <v-icon>mdi-send</v-icon>
-          </v-btn>
-        </template>
-        <span class="tooltip">Send</span>
-      </v-tooltip>
+      <DialogSend />
 
       <v-menu
         left
@@ -145,9 +127,13 @@
 </template>
 
 <script>
+  import DialogSettings from '@/components/widgets/dialogs/DialogSettings'
+  import DialogSend from '@/components/widgets/dialogs/DialogSend'
+
   export default {
     components: {
-
+      DialogSettings,
+      DialogSend,
     },
     data() {
       return {
@@ -161,14 +147,27 @@
             { name: 'Script editor', icon: 'mdi-code-tags' },
             { name: 'Add-ons', icon: 'mdi-puzzle' },
             { name: 'Preferences', icon: 'mdi-account-settings' },
-          ]
+          ],
+          is_starred: false,
         }
       },
     computed: {
-
+      getStarIcon() {
+        if (this.is_starred) {
+          return 'mdi-star'
+        } else {
+          return 'mdi-star-outline'
+        }
+      }
     },
     methods: {
-
+      starForm() {
+        if (this.is_starred) {
+          this.is_starred = false
+        } else {
+          this.is_starred = true
+        }
+      }
     }
   }
 </script>

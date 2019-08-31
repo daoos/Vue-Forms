@@ -6,14 +6,15 @@
           <v-text-field
             :color="theme_color"
             :prepend-icon="getPrependIcon"
-            :append-outer-icon="numberOfOptions >= 2 ? 'mdi-window-close' : undefined"
+            :append-outer-icon="numberOfOptions >= 2 && isFocused ? 'mdi-window-close' : undefined"
+            :disabled="!isFocused"
             @click:append-outer="deleteOption(index)"
             v-model="question.options[index].option">
           </v-text-field>
         </v-col>
       </v-row>
     </div>
-    <v-row>
+    <v-row v-show="isFocused">
       <v-col cols="10">
         <v-text-field
           :color="theme_color"
@@ -30,7 +31,9 @@
 	export default {
 		props: [
       "question",
-      "theme_color", 
+      "question_index",
+      "theme_color",
+      "focused_form",
       ],
     data() {
       return {
@@ -47,6 +50,13 @@
           case 'Dropdown':
             return 'mdi-arrow-down-drop-circle'
           }
+      },
+      isFocused() {
+        if (this.focused_form == this.question_index) {
+          return true
+        } else {
+          return false
+        }
       }
     },
     methods: {

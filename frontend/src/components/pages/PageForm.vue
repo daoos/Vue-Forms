@@ -112,7 +112,10 @@
 
     </v-card>
 
-    <v-card v-for="(question, question_index) in question.questions">
+    <v-card 
+      v-for="(question, question_index) in question.questions" 
+      @click.native="focusForm(question_index)"
+      :elevation="getFormElevation(question_index)">
       <!-- Replace the whole element if the format is File upload -->
       <component
         :is="question_format_list[question.question_format]"
@@ -125,6 +128,7 @@
                 <v-text-field
                   class="title"
                   :color="theme_color"
+                  :disabled="!isFocused(question_index)"
                   placeholder="Question"
                   v-model="question.question">
                 </v-text-field>
@@ -170,17 +174,21 @@
                   @addColumn="addColumn(question_index)"
                   @deleteColumn="(...args) => deleteColumn(question_index, ...args)"
                   :question="question"
-                  :theme_color="theme_color" />
+                  :question_index="question_index"
+                  :theme_color="theme_color"
+                  :focused_form="focused_form" />
               </v-col>
             </v-row>
           </v-container>
         </v-form>
 
-        <v-container>
+        <v-container v-show="isFocused(question_index)">
           <v-divider></v-divider>
         </v-container>
 
-        <v-card-actions class="card-actions">
+        <v-card-actions 
+          class="card-actions"
+          v-show="isFocused(question_index)">
           <div class="flex-grow-1"></div>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -237,6 +245,7 @@
     },
     data() {
       return {
+        focused_form: 0,
         question: {
           title: 'Untitled form',
           description: '',
@@ -291,29 +300,37 @@
           }
       }
     },
+    computed: {
+      getFocusedForm() {
+        return this.focused_form
+      }
+    },
     methods: {
       addQuestion() {
-        this.question.questions.push({
-            question: '',
-            question_format: 'Multiple choices',
-            question_icon: 'mdi-radiobox-marked',
-            options: [
-              {
-                option: 'Option1',
-              },
-            ],
-            rows: [
-              {
-                row: 'Row1',
-              }
-            ],
-            cols: [
-              {
-                col: 'Column1',
-              }
-            ],
-          }
+        // Insert form component into the next to the focused form
+        this.question.questions.splice(this.focused_form + 1, 0, 
+            {
+              question: '',
+              question_format: 'Multiple choices',
+              question_icon: 'mdi-radiobox-marked',
+              options: [
+                {
+                  option: 'Option1',
+                },
+              ],
+              rows: [
+                {
+                  row: 'Row1',
+                }
+              ],
+              cols: [
+                {
+                  col: 'Column1',
+                }
+              ],
+            }
         )
+        this.focused_form += 1
       },
       deleteQuestion(question_index) {
         this.question.questions.splice(question_index, 1)
@@ -346,6 +363,27 @@
       deleteColumn(question_index, args) {
         this.question.questions[question_index].cols.splice(args, 1)
       },
+      focusForm(index) {
+        this.focused_form = index
+        // In case the index is out of range when deleting the last question while focusing on the form
+        if (this.focused_form > this.question.questions.length - 1) {
+          this.focused_form -= 1
+        }
+      },
+      getFormElevation(index) {
+        if (index == this.focused_form) {
+          return '24'
+        } else {
+          return '0'
+        }
+      },
+      isFocused(index) {
+        if (index == this.focused_form) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   }
 </script>

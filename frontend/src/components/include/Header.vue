@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app-bar
-      color="deep-purple darken-1"
+      :color="theme_color"
       flat
       dark
       >
@@ -59,7 +59,8 @@
         <template v-slot:activator="{ on }">
           <v-btn 
             icon
-            v-on="on">
+            v-on="on"
+            @click.stop="drawer = !drawer">
             <v-icon>mdi-palette</v-icon>
           </v-btn>
         </template>
@@ -77,9 +78,9 @@
         <span class="tooltip">Preview</span>
       </v-tooltip>
 
-      <DialogSettings />
+      <DialogSettings :theme_color="theme_color" />
 
-      <DialogSend />
+      <DialogSend :theme_color="theme_color" />
 
       <v-menu
         left
@@ -123,17 +124,24 @@
       </v-tooltip>
 
     </v-app-bar>
+
+    <NavCustomizeThemeColor
+      @changeThemeColor="(...args) => changeThemeColor(...args)"
+      @changeBackgroundColor="(...args) => changeBackgroundColor(...args)"
+      v-model="drawer" />
   </div>
 </template>
 
 <script>
   import DialogSettings from '@/components/widgets/dialogs/DialogSettings'
   import DialogSend from '@/components/widgets/dialogs/DialogSend'
+  import NavCustomizeThemeColor from '@/components/widgets/navs/NavCustomizeThemeColor'
 
   export default {
     components: {
       DialogSettings,
       DialogSend,
+      NavCustomizeThemeColor,
     },
     data() {
       return {
@@ -149,6 +157,8 @@
             { name: 'Preferences', icon: 'mdi-account-settings' },
           ],
           is_starred: false,
+          drawer: false,
+          theme_color: 'deep-purple darken-1',
         }
       },
     computed: {
@@ -167,6 +177,13 @@
         } else {
           this.is_starred = true
         }
+      },
+      changeThemeColor(args) {
+        this.theme_color = args
+        this.$emit('changeThemeColor', args)
+      },
+      changeBackgroundColor(args) {
+        this.$emit('changeBackgroundColor', args)
       }
     }
   }

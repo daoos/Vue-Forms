@@ -3,7 +3,7 @@
    <v-row>
     <v-col :cols="getCols">
       <v-text-field 
-        color="deep-purple darken-1"
+        :color="theme_color"
         :placeholder="getPlaceHolder"
         :append-icon="getAppendIcon"
         disabled>
@@ -15,7 +15,10 @@
 
 <script>
 	export default {
-    props: ["question"],
+    props: [
+      "question",
+      "theme_color",
+      ],
     computed: {
       getCols() {
         switch(this.question.question_format) {

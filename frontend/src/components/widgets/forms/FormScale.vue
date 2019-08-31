@@ -20,7 +20,7 @@
    <v-row>
     <v-col cols="3">
       <v-text-field 
-        color="deep-purple darken-1"
+        :color="theme_color"
         placeholder="Label (optional)">
       </v-text-field>
     </v-col>
@@ -28,7 +28,7 @@
    <v-row>
     <v-col cols="3">
       <v-text-field 
-        color="deep-purple darken-1"
+        :color="theme_color"
         placeholder="Label (optional)">
       </v-text-field>
     </v-col>
@@ -38,6 +38,7 @@
 
 <script>
 	export default {
+    props: ["theme_color"],
     data() {
       return {
         selectedMin: "1",

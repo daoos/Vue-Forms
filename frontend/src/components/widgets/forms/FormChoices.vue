@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="10">
           <v-text-field
-            color="deep-purple darken-1"
+            :color="theme_color"
             :prepend-icon="getPrependIcon"
             :append-outer-icon="numberOfOptions >= 2 ? 'mdi-window-close' : undefined"
             @click:append-outer="deleteOption(index)"
@@ -16,7 +16,7 @@
     <v-row>
       <v-col cols="10">
         <v-text-field
-          color="deep-purple darken-1"
+          :color="theme_color"
           :prepend-icon="getPrependIcon"
           placeholder='Add option or ADD "OTHER"'
           @click="addOption">
@@ -28,7 +28,10 @@
 
 <script>
 	export default {
-		props: ["question"],
+		props: [
+      "question",
+      "theme_color", 
+      ],
     data() {
       return {
         numberOfOptions: this.question.options.length,

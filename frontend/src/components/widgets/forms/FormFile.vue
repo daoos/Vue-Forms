@@ -11,7 +11,7 @@
       </v-btn>
       <v-btn
         text
-        color="deep-purple darken-1">
+        :color="theme_color">
         CONTINUE
       </v-btn>
     </v-card-actions>
@@ -19,7 +19,9 @@
 </template>
 
 <script>
-	
+	export default {
+    props: ["theme_color"],
+  }
 </script>
 
 <style scoped>

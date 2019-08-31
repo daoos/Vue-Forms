@@ -3,8 +3,8 @@
     <v-card>
       <v-tabs
         background-color="white"
-        color="deep-purple darken-1"
-        slider-color="deep-purple darken-1"
+        :color="theme_color"
+        :slider-color="theme_color"
         centered>
 
         <v-tabs-slider></v-tabs-slider>
@@ -23,11 +23,11 @@
           <v-row>
             <v-col>
               <v-text-field
-                class="input-title font-weight-medium"
-                color="deep-purple darken-1"
+                class="title font-weight-medium"
+                :color="theme_color"
                 v-model="question.title"/>
               <v-text-field
-                color="deep-purple darken-1" 
+                :color="theme_color" 
                 placeholder="Form description" />
             </v-col>
           </v-row>
@@ -42,6 +42,7 @@
             <v-tooltip right>
               <template v-slot:activator="{ on }">
                 <v-btn 
+                  class="form-editor-button"
                   icon
                   @click="addQuestion"
                   v-on="on">
@@ -50,13 +51,10 @@
               </template>
               <span class="tooltip">Add question</span>
             </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
                 <v-btn 
+                  class="form-editor-button"
                   icon
                   v-on="on">
                   <v-icon>mdi-import</v-icon>
@@ -64,13 +62,10 @@
               </template>
               <span class="tooltip">Import questions</span>
             </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
                 <v-btn 
+                  class="form-editor-button"
                   icon
                   v-on="on">
                   <v-icon>mdi-format-title</v-icon>
@@ -78,13 +73,10 @@
               </template>
               <span class="tooltip">Add title and description</span>
             </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
                 <v-btn 
+                  class="form-editor-button"
                   icon
                   v-on="on">
                   <v-icon>mdi-image</v-icon>
@@ -92,13 +84,10 @@
               </template>
               <span class="tooltip">Add image</span>
             </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
                 <v-btn 
+                  class="form-editor-button"
                   icon
                   v-on="on">
                   <v-icon>mdi-youtube</v-icon>
@@ -106,13 +95,10 @@
               </template>
               <span class="tooltip">Add video</span>
             </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
                 <v-btn 
+                  class="form-editor-button"
                   icon
                   v-on="on">
                   <v-icon>mdi-note-plus</v-icon>
@@ -137,7 +123,8 @@
             <v-row>
               <v-col cols="8">
                 <v-text-field
-                  color="deep-purple darken-1"
+                  class="title"
+                  :color="theme_color"
                   placeholder="Question"
                   v-model="question.question">
                 </v-text-field>
@@ -182,7 +169,8 @@
                   @deleteRow="(...args) => deleteRow(question_index, ...args)"
                   @addColumn="addColumn(question_index)"
                   @deleteColumn="(...args) => deleteColumn(question_index, ...args)"
-                  :question="question" />
+                  :question="question"
+                  :theme_color="theme_color" />
               </v-col>
             </v-row>
           </v-container>
@@ -239,6 +227,7 @@
   import FormGrid from '@/components/widgets/forms/FormGrid'
 
   export default {
+    props: ["theme_color"],
     components: {
       FormText,
       FormChoices,
@@ -377,8 +366,8 @@
     right: -50px;
   }
 
-  .input-title {
-    font-size: 24px;
+  .form-editor-button {
+    margin-bottom: 7px;
   }
 
   .switch-label {

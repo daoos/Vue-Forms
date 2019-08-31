@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-      <v-app style="background: #EDE7F6">
-          <Header />
-          <PageForm />
+      <v-app v-bind:style="{ background: background_color }">
+          <Header 
+            @changeThemeColor="(...args) => changeThemeColor(...args)"
+            @changeBackgroundColor="(...args) => changeBackgroundColor(...args)"  />
+          <PageForm :theme_color="theme_color" />
           <HelpButton />
       </v-app>
   </div>
@@ -20,6 +22,20 @@ export default {
         PageForm,
         HelpButton,
     },
+    data() {
+      return {
+        theme_color: 'deep-purple darken-1',
+        background_color: '#EDE7F6',
+      }
+    },
+    methods: {
+      changeThemeColor(args) {
+        this.theme_color = args
+      },
+      changeBackgroundColor(args) {
+        this.background_color = args
+      },
+    }
 };
 </script>
 

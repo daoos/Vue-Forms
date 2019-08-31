@@ -5,14 +5,14 @@
         <div>Rows</div>
           <div v-for="(row, index) in numberOfRows">
             <v-text-field 
-              color="deep-purple darken-1"
+              :color="theme_color"
               :append-outer-icon="numberOfRows >= 2 ? 'mdi-window-close' : undefined"
               @click:append-outer="deleteRow(index)"
               v-model="question.rows[index].row">
             </v-text-field>
           </div>
           <v-text-field 
-            color="deep-purple darken-1"
+            :color="theme_color"
             placeholder="Add row"
             @click="addRow">
           </v-text-field>
@@ -21,7 +21,7 @@
         <div>Columns</div>
           <div v-for="(col, index) in numberOfColumns">
             <v-text-field
-              color="deep-purple darken-1"
+              :color="theme_color"
               :prepend-icon="getPrependIcon"
               :append-outer-icon="numberOfColumns >= 2 ? 'mdi-window-close' : undefined"
               @click:append-outer="deleteColumn(index)"
@@ -29,7 +29,7 @@
             </v-text-field>
           </div>
           <v-text-field 
-            color="deep-purple darken-1"
+            :color="theme_color"
             :prepend-icon="getPrependIcon"
             placeholder="Add column"
             @click="addColumn">
@@ -41,7 +41,10 @@
 
 <script>
   export default {
-    props: ["question"],
+    props: [
+      "question",
+      "theme_color",
+      ],
     data() {
       return {
         numberOfRows: this.question.rows.length,

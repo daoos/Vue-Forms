@@ -129,7 +129,9 @@
             </div>
             <component
               :is="question_format_list[question.question_format]"
-              v-if="question.question_format == 'File upload'" />
+              v-if="question.question_format == 'File upload'"
+              @cancelFormFile="cancelFormFile(question_index)"
+              @advanceToFormFile="advanceToFormFile(question_index)" />
             <div v-else>
               <v-form>
                 <v-container>
@@ -154,14 +156,14 @@
                               left>
                               {{ question.question_icon }}
                             </v-icon>
-                            {{ question.question_format }}
+                            {{ question.question_format == 'Actually file upload' ? 'File upload' : question.question_format }}
                           </v-btn>
                         </template>
                         <v-list>
                           <v-list-item
                             v-for="(format, index) in question_format"
                             :key="index"
-                            @click="changeQuestionFormat(question_index, format)">
+                            @click="changeQuestionFormat(question_index, question.question_format, question.question_icon, format)">
                             <v-list-item-icon>
                               <v-icon>{{ format.icon }}</v-icon>
                             </v-list-item-icon>
@@ -253,6 +255,7 @@
   import FormChoices from '@/components/widgets/forms/FormChoices'
   import FormText from '@/components/widgets/forms/FormText'
   import FormFile from '@/components/widgets/forms/FormFile'
+  import FormBeforeUploadFile from '@/components/widgets/forms/FormBeforeUploadFile'
   import FormScale from '@/components/widgets/forms/FormScale'
   import FormGrid from '@/components/widgets/forms/FormGrid'
   import ItemReponse from '@/components/tab_items/ItemReponse'
@@ -264,6 +267,7 @@
       FormText,
       FormChoices,
       FormFile,
+      FormBeforeUploadFile,
       FormScale,
       FormGrid,
       ItemReponse,
@@ -280,6 +284,8 @@
               question: '',
               question_format: 'Multiple choices',
               question_icon: 'mdi-radiobox-marked',
+              old_format: 'Multiple choices',
+              old_format_icon: 'mdi-radiobox-marked',
               options: [
                 {
                   option: 'Option1',
@@ -317,7 +323,8 @@
             'Multiple choices': 'FormChoices',
             'Checkboxes': 'FormChoices',
             'Dropdown': 'FormChoices',
-            'File upload': 'FormFile',
+            'File upload': 'FormBeforeUploadFile',
+            'Actually file upload': 'FormFile',
             'Linear scale': 'FormScale',
             'Multiple choice grid': 'FormGrid',
             'Checkbox grid': 'FormGrid',
@@ -361,7 +368,9 @@
       deleteQuestion(question_index) {
         this.question.questions.splice(question_index, 1)
       },
-      changeQuestionFormat(question_index, format) {
+      changeQuestionFormat(question_index, old_format, old_format_icon, format) {
+        this.question.questions[question_index].old_format = old_format
+        this.question.questions[question_index].old_format_icon = old_format_icon
         this.question.questions[question_index].question_format = format.name
         this.question.questions[question_index].question_icon = format.icon
       },
@@ -388,6 +397,13 @@
       },
       deleteColumn(question_index, args) {
         this.question.questions[question_index].cols.splice(args, 1)
+      },
+      cancelFormFile(question_index) {
+        this.question.questions[question_index].question_format = this.question.questions[question_index].old_format
+        this.question.questions[question_index].question_icon = this.question.questions[question_index].old_format_icon
+      },
+      advanceToFormFile(question_index) {
+        this.question.questions[question_index].question_format = 'Actually file upload'
       },
       focusForm(index) {
         this.focused_form = index

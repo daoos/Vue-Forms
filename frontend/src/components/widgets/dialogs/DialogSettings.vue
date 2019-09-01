@@ -93,6 +93,7 @@
             <v-col>
               <v-switch 
                 class="switch"
+                :color="theme_color"
                 label="Make this a quiz"
                 v-model="isQuiz"></v-switch>
               <span>Assign point values to questions and allow auto-grading.</span>        

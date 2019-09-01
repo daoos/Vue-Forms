@@ -36,7 +36,8 @@
 
           <v-card 
             class="form-editor" 
-            width="36">
+            width="36"
+            :style="{ top: distance + 'px' }">
             <v-row>
               <v-col>
                 <v-tooltip right>
@@ -270,6 +271,7 @@
     data() {
       return {
         focused_form: 0,
+        distance: 0,
         question: {
           title: 'Untitled form',
           description: '',
@@ -411,7 +413,16 @@
       onEnd(event) {
         this.focused_form = event.newIndex
       },
-    }
+      handleScroll() {
+        this.distance = window.scrollY
+      },
+    },
+    created() {
+      window.addEventListener('scroll', this.handleScroll)
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.handleScroll)
+    },
   }
 </script>
 
@@ -431,7 +442,6 @@
   /* 50px right to the parent element (v-card) */
   .form-editor {
     position: absolute;
-    top: 0px;
     right: -50px;
   }
 

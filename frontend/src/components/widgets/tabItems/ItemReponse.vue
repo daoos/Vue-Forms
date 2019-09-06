@@ -8,7 +8,7 @@
           </v-col>
           <div class="flex-grow-1"></div>
           <v-col cols="1">
-            <DialogSpreadsheet :theme_color="theme_color" />
+            <DialogSpreadsheet :themeColor="themeColor" />
           </v-col>
           <v-col cols="1">
             <v-menu
@@ -43,12 +43,14 @@
             :style="{ backgroundColor: getBackgroundColor }"></div>
           <v-col 
             class="switch-label-container"
-            cols="4" 
+            cols="6" 
             :style="{ backgroundColor: getBackgroundColor }">
             <div
               class="response-switch-label"
-              :style="{ color: switch_1 ? '#757575' : 'white' }"
-              >{{ switch_1 ? 'Accepting responses' : 'Not accepting responses' }}</div>
+              :style="{ color: switch1 ? '#757575' : 'white' }"
+              >
+              <small>{{ switch1 ? 'Accepting responses' : 'Not accepting responses' }}</small>
+            </div>
           </v-col>
           <v-col 
             class="switch-container"
@@ -56,14 +58,14 @@
             :style="{ backgroundColor: getBackgroundColor }">
             <v-switch 
               class="switch"
-              :color="theme_color"
-              v-model="switch_1"></v-switch>
+              :color="themeColor"
+              v-model="switch1"></v-switch>
           </v-col>
           <v-col 
             class="message-for-respondents-text-field-col"
             cols="12"">
             <v-card
-              v-show="!switch_1"
+              v-show="!switch1"
               tile 
               outlined>
               <v-form>
@@ -71,7 +73,7 @@
                   <v-row>
                     <v-col>
                       <v-text-field
-                        :color="theme_color"
+                        :color="themeColor"
                         label="Message for respondents"
                         placeholder="This form is no longer accepting responses" />
                     </v-col>
@@ -83,9 +85,9 @@
         </v-row>
       </v-container>
     </v-card>
-    <v-card v-show="switch_1">
+    <v-card v-show="switch1">
       <div class="accepting-response-text">
-        Waiting for response
+        <small>Waiting for response</small>
       </div>
     </v-card>
   </div>
@@ -95,13 +97,13 @@
   import DialogSpreadsheet from '@/components/widgets/dialogs/DialogSpreadsheet'
 
   export default {
-    props: ["theme_color"],
+    props: ["themeColor"],
     components: {
       DialogSpreadsheet,
     },
     data() {
       return {
-        switch_1: true,
+        switch1: true,
         items: [
           { name: 'Get email notificaitons for new responses', icon: undefined },
           { name: 'Select response destination', icon: undefined },
@@ -114,7 +116,7 @@
     },
     computed: {
       getBackgroundColor() {
-        if (this.switch_1) {
+        if (this.switch1) {
           return 'white'
         } else {
           return '#E53935'
@@ -147,7 +149,7 @@
 
   .response-switch-label {
     position: relative;
-    padding-top: 23px;
+    padding-top: 20px;
   }
 
   .message-for-respondents-text-field-col {

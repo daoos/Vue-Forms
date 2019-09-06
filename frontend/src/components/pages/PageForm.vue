@@ -1,251 +1,196 @@
 <template>
-  <div class="container whole-container">
+  <div>
+    <BottomFormEditor 
+      v-show="tabs == 0 && $viewport .width < 850"
+      @addQuestion="addQuestion" />
 
-    <v-tabs
-      background-color="white"
-      :color="theme_color"
-      :slider-color="theme_color"
-      centered>
+    <div class="container whole-container">
+      <v-tabs
+        v-model="tabs"
+        background-color="white"
+        :color="themeColor"
+        :slider-color="themeColor"
+        centered>
 
-      <v-tabs-slider></v-tabs-slider>
+        <v-tabs-slider></v-tabs-slider>
 
-      <v-tab>
-        QUESTIONS
-      </v-tab>
-      <v-tab>
-        RESPONSE
-      </v-tab>
+        <v-tab>
+          QUESTIONS
+        </v-tab>
+        <v-tab>
+          RESPONSE
+        </v-tab>
 
-      <v-tab-item>
-        <v-card>
-          <v-form>
-            <v-container>
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    class="title font-weight-medium"
-                    :color="theme_color"
-                    v-model="question.title"/>
-                  <v-text-field
-                    :color="theme_color" 
-                    placeholder="Form description" />
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-form>
-
-          <v-card 
-            class="form-editor" 
-            width="36"
-            :style="{ top: distance + 'px' }">
-            <v-row>
-              <v-col>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn 
-                      class="form-editor-button"
-                      icon
-                      @click="addQuestion"
-                      v-on="on">
-                      <v-icon>mdi-plus-circle</v-icon>
-                    </v-btn>
-                  </template>
-                  <span class="tooltip">Add question</span>
-                </v-tooltip>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn 
-                      class="form-editor-button"
-                      icon
-                      v-on="on">
-                      <v-icon>mdi-import</v-icon>
-                    </v-btn>
-                  </template>
-                  <span class="tooltip">Import questions</span>
-                </v-tooltip>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn 
-                      class="form-editor-button"
-                      icon
-                      v-on="on">
-                      <v-icon>mdi-format-title</v-icon>
-                    </v-btn>
-                  </template>
-                  <span class="tooltip">Add title and description</span>
-                </v-tooltip>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn 
-                      class="form-editor-button"
-                      icon
-                      v-on="on">
-                      <v-icon>mdi-image</v-icon>
-                    </v-btn>
-                  </template>
-                  <span class="tooltip">Add image</span>
-                </v-tooltip>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn 
-                      class="form-editor-button"
-                      icon
-                      v-on="on">
-                      <v-icon>mdi-youtube</v-icon>
-                    </v-btn>
-                  </template>
-                  <span class="tooltip">Add video</span>
-                </v-tooltip>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn 
-                      class="form-editor-button"
-                      icon
-                      v-on="on">
-                      <v-icon>mdi-note-plus</v-icon>
-                    </v-btn>
-                  </template>
-                  <span class="tooltip">Add section</span>
-                </v-tooltip>
-              </v-col>
-            </v-row>
-          </v-card>
-
-        </v-card>
-
-        <draggable 
-          v-model="question.questions"
-          handle=".handle"
-          @end="onEnd">
-          <v-card 
-            v-for="(question, question_index) in question.questions" 
-            @click.native="focusForm(question_index)"
-            :elevation="getFormElevation(question_index)">
-            <!-- Replace the whole element if the format is File upload -->
-            <div class="handle-icon-container">
-              <v-icon 
-                class="handle"
-                v-show="isFocused(question_index)">mdi-dots-horizontal</v-icon>
-            </div>
-            <component
-              :is="question_format_list[question.question_format]"
-              v-if="question.question_format == 'File upload'"
-              @cancelFormFile="cancelFormFile(question_index)"
-              @advanceToFormFile="advanceToFormFile(question_index)" />
-            <div v-else>
-              <v-form>
-                <v-container>
-                  <v-row>
-                    <v-col cols="8">
-                      <v-text-field
-                        class="title"
-                        :color="theme_color"
-                        :disabled="!isFocused(question_index)"
-                        placeholder="Question"
-                        v-model="question.question">
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="4">
-                      <v-menu offset-y>
-                        <template v-slot:activator="{ on }">
-                          <v-btn
-                            depressed 
-                            v-on="on">
-                            <v-icon 
-                              color="grey darken-1" 
-                              left>
-                              {{ question.question_icon }}
-                            </v-icon>
-                            {{ question.question_format == 'Actually file upload' ? 'File upload' : question.question_format }}
-                          </v-btn>
-                        </template>
-                        <v-list>
-                          <v-list-item
-                            v-for="(format, index) in question_format"
-                            :key="index"
-                            @click="changeQuestionFormat(question_index, question.question_format, question.question_icon, format)">
-                            <v-list-item-icon>
-                              <v-icon>{{ format.icon }}</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-title>
-                              {{ format.name }}
-                            </v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <component
-                        :is="question_format_list[question.question_format]"
-                        @addOption="addOption(question_index)"
-                        @deleteOption="(...args) => deleteOption(question_index, ...args)"
-                        @addRow="addRow(question_index)"
-                        @deleteRow="(...args) => deleteRow(question_index, ...args)"
-                        @addColumn="addColumn(question_index)"
-                        @deleteColumn="(...args) => deleteColumn(question_index, ...args)"
-                        :question="question"
-                        :question_index="question_index"
-                        :theme_color="theme_color"
-                        :focused_form="focused_form" />
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-form>
-
-              <v-container v-show="isFocused(question_index)">
-                <v-divider></v-divider>
+        <v-tab-item>
+          <v-card>
+            <v-form>
+              <v-container>
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      class="title font-weight-medium"
+                      :color="themeColor"
+                      v-model="question.title"/>
+                    <v-text-field
+                      :color="themeColor" 
+                      placeholder="Form description" />
+                  </v-col>
+                </v-row>
               </v-container>
+            </v-form>
 
-              <v-card-actions 
-                class="card-actions"
-                v-show="isFocused(question_index)">
-                <div class="flex-grow-1"></div>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      class="actions-icon"
-                      icon
-                      v-on="on">
-                      <v-icon>mdi-content-copy</v-icon>
-                    </v-btn>
-                  </template>
-                  <span class="tooltip">Duplicate</span>
-                </v-tooltip>
+            <FormEditor 
+              v-show="$viewport .width > 850"
+              @addQuestion="addQuestion" />
 
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      class="actions-icon"
-                      icon
-                      @click="deleteQuestion(question_index)"
-                      v-on="on">
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                  </template>
-                  <span class="tooltip">Delete</span>
-                </v-tooltip>
-
-                <v-divider vertical></v-divider>
-                <span class="switch-label">Required</span>
-                <v-switch 
-                  class="switch"
-                  :color="theme_color"></v-switch>
-                <v-btn icon>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </v-card-actions>
-            </div>
           </v-card>
-        </draggable>
-      </v-tab-item>
 
-      <v-tab-item>
-        <ItemReponse :theme_color="theme_color" />
-      </v-tab-item>
-      
-    </v-tabs>
+          <draggable 
+            v-model="question.questions"
+            handle=".handle"
+            @end="onEnd">
+            <v-card 
+              v-for="(question, questionIndex) in question.questions" 
+              @click.native="focusForm(questionIndex)"
+              :elevation="questionIndex == focusedFormIndex ? '24' : '0'">
+              <div class="handle-icon-container">
+                <v-icon 
+                  class="handle"
+                  v-show="isFocused(questionIndex)">mdi-dots-horizontal</v-icon>
+              </div>
+              <!-- Replace the whole element if the format is File upload -->
+              <component
+                :is="questionFormatList[question.questionFormat]"
+                v-if="question.questionFormat == 'File upload'"
+                @cancelFormFile="cancelFormFile(questionIndex)"
+                @advanceToFormFile="advanceToFormFile(questionIndex)"
+                :themeColor="themeColor" />
+              <div v-else>
+                <v-form>
+                  <v-container>
+                    <v-row>
+                      <v-col 
+                        cols="12" 
+                        xl="8" 
+                        lg="8" 
+                        md="8" 
+                        sm="8">
+                        <v-text-field
+                          class="title"
+                          :color="themeColor"
+                          :disabled="!isFocused(questionIndex)"
+                          placeholder="Question"
+                          v-model="question.question">
+                        </v-text-field>
+                      </v-col>
+                      <v-col 
+                        cols="8" 
+                        xl="4" 
+                        lg="4" 
+                        md="4" 
+                        sm="4">
+                        <v-menu offset-y>
+                          <template v-slot:activator="{ on }">
+                            <v-btn
+                              depressed 
+                              v-on="on"
+                              v-show="isFocused(questionIndex)">
+                              <v-icon 
+                                color="grey darken-1" 
+                                left>
+                                {{ question.questionIcon }}
+                              </v-icon>
+                              {{ question.questionFormat == 'Actually file upload' ? 'File upload' : question.questionFormat }}
+                            </v-btn>
+                          </template>
+                          <v-list>
+                            <v-list-item
+                              v-for="(format, index) in questionFormat"
+                              :key="index"
+                              @click="changeQuestionFormat(questionIndex, question.questionFormat, question.questionIcon, format)">
+                              <v-list-item-icon>
+                                <v-icon>{{ format.icon }}</v-icon>
+                              </v-list-item-icon>
+                              <v-list-item-title>
+                                {{ format.name }}
+                              </v-list-item-title>
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <component
+                          :is="questionFormatList[question.questionFormat]"
+                          @addOption="addOption(questionIndex)"
+                          @deleteOption="(...args) => deleteOption(questionIndex, ...args)"
+                          @addRow="addRow(questionIndex)"
+                          @deleteRow="(...args) => deleteRow(questionIndex, ...args)"
+                          @addColumn="addColumn(questionIndex)"
+                          @deleteColumn="(...args) => deleteColumn(questionIndex, ...args)"
+                          :question="question"
+                          :questionIndex="questionIndex"
+                          :themeColor="themeColor"
+                          :focusedFormIndex="focusedFormIndex" />
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
+
+                <v-container v-show="isFocused(questionIndex)">
+                  <v-divider></v-divider>
+                </v-container>
+
+                <v-card-actions 
+                  class="card-actions"
+                  v-show="isFocused(questionIndex)">
+                  <div class="flex-grow-1"></div>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        class="actions-icon"
+                        icon
+                        v-on="on">
+                        <v-icon>mdi-content-copy</v-icon>
+                      </v-btn>
+                    </template>
+                    <span class="tooltip">Duplicate</span>
+                  </v-tooltip>
+
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        class="actions-icon"
+                        icon
+                        @click="deleteQuestion(questionIndex)"
+                        v-on="on">
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </template>
+                    <span class="tooltip">Delete</span>
+                  </v-tooltip>
+
+                  <v-divider vertical></v-divider>
+                  <span class="switch-label">Required</span>
+                  <v-switch 
+                    class="switch"
+                    :color="themeColor"></v-switch>
+                  <v-btn icon>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </v-card-actions>
+              </div>
+            </v-card>
+          </draggable>
+        </v-tab-item>
+
+        <v-tab-item>
+          <ItemReponse :themeColor="themeColor" />
+        </v-tab-item>
+        
+      </v-tabs>
+    </div>
   </div>
 </template>
 
@@ -258,10 +203,12 @@
   import FormBeforeUploadFile from '@/components/widgets/forms/FormBeforeUploadFile'
   import FormScale from '@/components/widgets/forms/FormScale'
   import FormGrid from '@/components/widgets/forms/FormGrid'
-  import ItemReponse from '@/components/tab_items/ItemReponse'
+  import ItemReponse from '@/components/widgets/tabItems/ItemReponse'
+  import FormEditor from '@/components/widgets/cards/CardFormEditor'
+  import BottomFormEditor from '@/components/widgets/cards/CardBottomFormEditor'
 
   export default {
-    props: ["theme_color"],
+    props: ["themeColor"],
     components: {
       draggable,
       FormText,
@@ -271,21 +218,23 @@
       FormScale,
       FormGrid,
       ItemReponse,
+      FormEditor,
+      BottomFormEditor,
     },
     data() {
       return {
-        focused_form: 0,
-        distance: 0,
+        focusedFormIndex: 0,
+        tabs: 0,
         question: {
           title: 'Untitled form',
           description: '',
           questions: [
             {
               question: '',
-              question_format: 'Multiple choices',
-              question_icon: 'mdi-radiobox-marked',
-              old_format: 'Multiple choices',
-              old_format_icon: 'mdi-radiobox-marked',
+              questionFormat: 'Multiple choices',
+              questionIcon: 'mdi-radiobox-marked',
+              oldFormat: 'Multiple choices',
+              oldIcon: 'mdi-radiobox-marked',
               options: [
                 {
                   option: 'Option1',
@@ -304,7 +253,7 @@
             }
           ],
         },
-        question_format: [
+        questionFormat: [
             { name: 'Short answer', icon: 'mdi-text-short' }, 
             { name: 'Paragraph', icon: 'mdi-text' }, 
             { name : 'Multiple choices', icon: 'mdi-radiobox-marked' }, 
@@ -317,7 +266,7 @@
             { name: 'Date', icon: 'mdi-calendar-range' }, 
             { name:'Time', icon: 'mdi-clock-outline'},
           ],
-          question_format_list: {
+          questionFormatList: {
             'Short answer': 'FormText',
             'Paragraph': 'FormText',
             'Multiple choices': 'FormChoices',
@@ -333,19 +282,14 @@
           }
       }
     },
-    computed: {
-      getFocusedForm() {
-        return this.focused_form
-      },
-    },
     methods: {
       addQuestion() {
         // Insert form component into the next to the focused form
-        this.question.questions.splice(this.focused_form + 1, 0, 
+        this.question.questions.splice(this.focusedFormIndex + 1, 0, 
             {
               question: '',
-              question_format: 'Multiple choices',
-              question_icon: 'mdi-radiobox-marked',
+              questionFormat: 'Multiple choices',
+              questionIcon: 'mdi-radiobox-marked',
               options: [
                 {
                   option: 'Option1',
@@ -363,81 +307,65 @@
               ],
             }
         )
-        this.focused_form += 1
+        this.focusedFormIndex += 1
       },
-      deleteQuestion(question_index) {
-        this.question.questions.splice(question_index, 1)
+      deleteQuestion(questionIndex) {
+        this.question.questions.splice(questionIndex, 1)
       },
-      changeQuestionFormat(question_index, old_format, old_format_icon, format) {
-        this.question.questions[question_index].old_format = old_format
-        this.question.questions[question_index].old_format_icon = old_format_icon
-        this.question.questions[question_index].question_format = format.name
-        this.question.questions[question_index].question_icon = format.icon
+      changeQuestionFormat(questionIndex, oldFormat, oldIcon, format) {
+        this.question.questions[questionIndex].oldFormat = oldFormat
+        this.question.questions[questionIndex].oldIcon = oldIcon
+        this.question.questions[questionIndex].questionFormat = format.name
+        this.question.questions[questionIndex].questionIcon = format.icon
       },
-      addOption(question_index) {
-        this.question.questions[question_index].options.push({
+      addOption(questionIndex) {
+        this.question.questions[questionIndex].options.push({
             option: '',
         })
       },
-      deleteOption(question_index, args) {
-        this.question.questions[question_index].options.splice(args, 1)
+      deleteOption(questionIndex, args) {
+        this.question.questions[questionIndex].options.splice(args, 1)
       },
-      addRow(question_index) {
-        this.question.questions[question_index].rows.push({
+      addRow(questionIndex) {
+        this.question.questions[questionIndex].rows.push({
           row: '',
         })
       },
-      deleteRow(question_index, args) {
-        this.question.questions[question_index].rows.splice(args, 1)
+      deleteRow(questionIndex, args) {
+        this.question.questions[questionIndex].rows.splice(args, 1)
       },
-      addColumn(question_index) {
-        this.question.questions[question_index].cols.push({
+      addColumn(questionIndex) {
+        this.question.questions[questionIndex].cols.push({
           col: '',
         })
       },
-      deleteColumn(question_index, args) {
-        this.question.questions[question_index].cols.splice(args, 1)
+      deleteColumn(questionIndex, args) {
+        this.question.questions[questionIndex].cols.splice(args, 1)
       },
-      cancelFormFile(question_index) {
-        this.question.questions[question_index].question_format = this.question.questions[question_index].old_format
-        this.question.questions[question_index].question_icon = this.question.questions[question_index].old_format_icon
+      cancelFormFile(questionIndex) {
+        this.question.questions[questionIndex].questionFormat = this.question.questions[questionIndex].oldFormat
+        this.question.questions[questionIndex].questionIcon = this.question.questions[questionIndex].oldIcon
       },
-      advanceToFormFile(question_index) {
-        this.question.questions[question_index].question_format = 'Actually file upload'
+      advanceToFormFile(questionIndex) {
+        this.question.questions[questionIndex].questionFormat = 'Actually file upload'
       },
       focusForm(index) {
-        this.focused_form = index
+        this.focusedFormIndex = index
         // In case the index is out of range when deleting the last question while focusing on the form
-        if (this.focused_form > this.question.questions.length - 1) {
-          this.focused_form -= 1
-        }
-      },
-      getFormElevation(index) {
-        if (index == this.focused_form) {
-          return '24'
-        } else {
-          return '0'
+        if (this.focusedFormIndex > this.question.questions.length - 1) {
+          this.focusedFormIndex -= 1
         }
       },
       isFocused(index) {
-        if (index == this.focused_form) {
+        if (index == this.focusedFormIndex) {
           return true
         } else {
           return false
         }
       },
       onEnd(event) {
-        this.focused_form = event.newIndex
+        this.focusedFormIndex = event.newIndex
       },
-      handleScroll() {
-        this.distance = window.scrollY
-      },
-    },
-    created() {
-      window.addEventListener('scroll', this.handleScroll)
-    },
-    destroyed() {
-      window.removeEventListener('scroll', this.handleScroll)
     },
   }
 </script>
@@ -451,18 +379,14 @@
     margin-bottom: 50px;
   }
 
+  @media (max-width: 450px) {
+    .whole-container {
+      margin-bottom: 100px;
+    }
+  }
+
   .handle-icon-container {
     text-align: center;
-  }
-
-  /* 50px right to the parent element (v-card) */
-  .form-editor {
-    position: absolute;
-    right: -50px;
-  }
-
-  .form-editor-button {
-    margin-bottom: 7px;
   }
 
   .switch-label {

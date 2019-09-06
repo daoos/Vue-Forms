@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="10">
           <v-text-field
-            :color="theme_color"
+            :color="themeColor"
             :prepend-icon="getPrependIcon"
             :append-outer-icon="numberOfOptions >= 2 && isFocused ? 'mdi-window-close' : undefined"
             :disabled="!isFocused"
@@ -17,7 +17,7 @@
     <v-row v-show="isFocused">
       <v-col cols="10">
         <v-text-field
-          :color="theme_color"
+          :color="themeColor"
           :prepend-icon="getPrependIcon"
           placeholder='Add option or ADD "OTHER"'
           @click="addOption">
@@ -31,9 +31,9 @@
 	export default {
 		props: [
       "question",
-      "question_index",
-      "theme_color",
-      "focused_form",
+      "questionIndex",
+      "themeColor",
+      "focusedFormIndex",
       ],
     data() {
       return {
@@ -42,7 +42,7 @@
     },
     computed: {
       getPrependIcon() {
-        switch (this.question.question_format) {
+        switch (this.question.questionFormat) {
           case 'Multiple choices':
             return 'mdi-circle-outline'
           case 'Checkboxes':
@@ -52,7 +52,7 @@
           }
       },
       isFocused() {
-        if (this.focused_form == this.question_index) {
+        if (this.focusedFormIndex == this.questionIndex) {
           return true
         } else {
           return false

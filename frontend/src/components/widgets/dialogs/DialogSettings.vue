@@ -1,13 +1,14 @@
 <template>
   <v-dialog 
     max-width="600px"
-    v-model="settings_dialog">
-    <template v-slot:activator="{ on: settings_dialog }">
+    v-model="dialog"
+    :fullscreen="$viewport.width < 450">
+    <template v-slot:activator="{ on: dialog }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on: tooltip }">
           <v-btn 
             icon
-            v-on="{ ...tooltip, ...settings_dialog }">
+            v-on="{ ...tooltip, ...dialog }">
             <v-icon>mdi-settings</v-icon>
           </v-btn>
         </template>
@@ -15,11 +16,25 @@
       </v-tooltip>
     </template>
     <v-card tile>
-      <v-card-title v-bind:style="{ backgroundColor: theme_color_list[theme_color] }">
+      <v-card-title v-bind:style="{ backgroundColor: themeColorList[themeColor] }">
+        <v-btn
+          class="close-button" 
+          icon
+          color="white"
+          v-show="$viewport.width < 450"
+          @click="dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
         <span class="headline font-weight-medium dialog-title">Settings</span>
+        <div class="flex-grow-1"></div>
+        <v-btn
+          icon
+          color="white"
+          v-show="$viewport.width < 450"
+          @click="dialog = false">SAVE</v-btn>
       </v-card-title>
       <v-tabs
-        :background-color="theme_color"
+        :background-color="themeColor"
         color="white"
         slider-color="white">
         <v-tabs-slider></v-tabs-slider>
@@ -31,11 +46,11 @@
             <v-row>
               <v-col>
                 <v-checkbox
-                  :color="theme_color"
+                  :color="themeColor"
                   label="Collect email addresses"
                   v-model="isEmailCollected"></v-checkbox>
                 <v-checkbox
-                  :color="theme_color"
+                  :color="themeColor"
                   label="Response receipts"
                   append-icon="mdi-help-circle"
                   :disabled="!isEmailCollected"></v-checkbox>
@@ -45,7 +60,7 @@
               <v-col>
                 <span class="font-weight-medium">Requires sign in:</span>
                 <v-checkbox
-                  :color="theme_color"
+                  :color="themeColor"
                   label="Limit to 1 response"></v-checkbox>
               </v-col>
             </v-row>
@@ -54,11 +69,23 @@
               <v-col>
                 <span class="font-weight-medium">Respondents can:</span>
                 <v-checkbox
-                  :color="theme_color"
+                  :color="themeColor"
                   label="Edit after submit"></v-checkbox>
                 <v-checkbox
-                  :color="theme_color"
+                  :color="themeColor"
                   label="See summary charts and response"></v-checkbox>
+              </v-col>
+            </v-row>
+            <v-divider></v-divider>
+            <v-row>
+              <v-col cols="12">
+                <span class="font-weight-medium">Maximum size of all files uploaded:</span>
+              </v-col>
+              <v-col cols="4">
+                <v-select 
+                  :items="maximumSizeOfFiles"
+                  :label="selectedMax">
+                </v-select>
               </v-col>
             </v-row>
         </v-card-text>
@@ -68,17 +95,17 @@
           <v-row>
             <v-col>
               <v-checkbox
-                :color="theme_color"
+                :color="themeColor"
                 label="Show progress bar">
               </v-checkbox>
               <v-checkbox
-                :color="theme_color"
+                :color="themeColor"
                 label="Shuffle question order">
               </v-checkbox>
               <v-checkbox
-                :color="theme_color"
+                :color="themeColor"
                 label="Show link to submit another response"
-                v-model="checkbox_1">
+                v-model="checkbox1">
               </v-checkbox>
               <p class="font-weight-bold">Confirmation message:</p>
               <p>Your response has been recorded.</p>
@@ -93,7 +120,7 @@
             <v-col>
               <v-switch 
                 class="switch"
-                :color="theme_color"
+                :color="themeColor"
                 label="Make this a quiz"
                 v-model="isQuiz"></v-switch>
               <span>Assign point values to questions and allow auto-grading.</span>        
@@ -111,32 +138,32 @@
                 <v-radio
                   label="Immediately after each submission"
                   :value="true"
-                  :color="theme_color"></v-radio>
+                  :color="themeColor"></v-radio>
                 <v-radio
                   label="Later, after manual review"
                   :value="false"
-                  :color="theme_color"></v-radio>
+                  :color="themeColor"></v-radio>
               </v-radio-group>
               <p class="font-weight-bold">Respondent can see:</p>
               <v-checkbox
-                :color="theme_color"
+                :color="themeColor"
                 label="Missed questions"
                 append-icon="mdi-help-circle"
-                v-model="checkbox_2"
+                v-model="checkbox2"
                 :disabled="!isQuiz">
               </v-checkbox>
               <v-checkbox
-                :color="theme_color"
+                :color="themeColor"
                 label="Correct answers"
                 append-icon="mdi-help-circle"
-                v-model="checkbox_3"
+                v-model="checkbox3"
                 :disabled="!isQuiz">
               </v-checkbox>
               <v-checkbox
-                :color="theme_color"
+                :color="themeColor"
                 label="Point values"
                 append-icon="mdi-help-circle"
-                v-model="checkbox_4"
+                v-model="checkbox4"
                 :disabled="!isQuiz">
               </v-checkbox> 
             </v-col>
@@ -145,15 +172,15 @@
       </v-tab-item>
       </v-tabs>
       <v-divider></v-divider>
-      <v-card-actions>
+      <v-card-actions v-show="$viewport.width > 450">
         <div class="flex-grow-1"></div>
         <v-btn 
           text
-          @click="settings_dialog = false">CANCEL</v-btn>
+          @click="dialog = false">CANCEL</v-btn>
         <v-btn 
-          :color="theme_color" 
+          :color="themeColor" 
           text
-          @click="settings_dialog = false">SAVE</v-btn>
+          @click="dialog = false">SAVE</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -161,18 +188,20 @@
 
 <script>
   export default {
-    props: ["theme_color"],
+    props: ["themeColor"],
     data() {
       return {
-        settings_dialog: false,
+        dialog: false,
         active: true,
-        checkbox_1: true,
-        checkbox_2: true,
-        checkbox_3: true,
-        checkbox_4: true,
+        checkbox1: true,
+        checkbox2: true,
+        checkbox3: true,
+        checkbox4: true,
         isQuiz: false,
         isEmailCollected: false,
-        theme_color_list: {
+        selectedMax: "1GB",
+        maximumSizeOfFiles: ['1GB', '10GB', '100GB', '1TB'],
+        themeColorList: {
           'red darken-1': '#E53935',
           'deep-purple darken-1': '#5E35B1',
           'indigo darken-1': '#3949AB',
@@ -194,5 +223,9 @@
 <style scoped>
   .dialog-title {
     color: #FFFFFF;
+  }
+
+  .close-button {
+    padding-right: 30px;
   }
 </style>

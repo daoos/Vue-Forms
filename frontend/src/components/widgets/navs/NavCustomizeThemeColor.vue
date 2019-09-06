@@ -10,7 +10,7 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title 
-            v-bind:style="{ color: theme_color_list[theme_color] }"
+            v-bind:style="{ color: themeColorList[themeColor] }"
             >THEME OPTIONS
           </v-list-item-title>
         </v-list-item-content>
@@ -192,7 +192,7 @@
       </v-list-item>
       <v-list-item>
         <v-btn
-          v-for="(color, index) in background_color_list[theme_color]"
+          v-for="(color, index) in backgroundColorList[themeColor]"
           class="background-color"
           :color="color" 
           fab
@@ -221,10 +221,10 @@
       </v-list-item>
       <v-list-item>
         <v-select
-          v-model="selected_font"
-          :items="font_list"
-          :item-text="selected_font"
-          :item-value="selected_font"
+          v-model="selectedFont"
+          :items="fontList"
+          :item-text="selectedFont"
+          :item-value="selectedFont"
           single-line>
         </v-select>
       </v-list-item>
@@ -242,10 +242,10 @@
     },
     data() {
       return {
-        theme_color: 'deep-purple darken-1',
-        background_color: '#EDE7F6',
-        selected_font: 'Basic',
-        theme_color_list: {
+        themeColor: 'deep-purple darken-1',
+        backgroundColor: '#EDE7F6',
+        selectedFont: 'Basic',
+        themeColorList: {
           'red darken-1': '#E53935',
           'deep-purple darken-1': '#5E35B1',
           'indigo darken-1': '#3949AB',
@@ -259,7 +259,7 @@
           'blue-grey darken-1': '#546E7A',
           'grey darken-1': '#757575',
         },
-        background_color_list: {
+        backgroundColorList: {
           'red darken-1': ['#FFEBEE', '#FFCDD2', '#EF9A9A'],
           'deep-purple darken-1': ['#EDE7F6', '#D1C4E9', '#B39DDB'],
           'indigo darken-1': ['#E8EAF6', '#C5CAE9', '#9FA8DA'],
@@ -273,29 +273,29 @@
           'blue-grey darken-1': ['#ECEFF1', '#CFD8DC', '#B0BEC5'],
           'grey darken-1': ['#FAFAFA', '#F5F5F5', '#EEEEEE'],
         },
-        font_list : ['Basic', 'Formal', 'Decorative', 'Playful'],      
+        fontList : ['Basic', 'Formal', 'Decorative', 'Playful'],      
       }
     },
     methods: {
       changeThemeColor(color) {
-        this.theme_color = color
-        this.background_color = this.background_color_list[color][0]
+        this.themeColor = color
+        this.backgroundColor = this.backgroundColorList[color][0]
         this.$emit('changeThemeColor', color)
-        this.$emit('changeBackgroundColor', this.background_color_list[color][0])
+        this.$emit('changeBackgroundColor', this.backgroundColorList[color][0])
       },
       changeBackgroundColor(color) {
-        this.background_color = color
+        this.backgroundColor = color
         this.$emit('changeBackgroundColor', color)
       },
-      isCurrentThemeColor(current_color) {
-        if (this.theme_color == current_color) {
+      isCurrentThemeColor(currentColor) {
+        if (this.themeColor == currentColor) {
           return true
         } else {
           return false
         }
       },
-      isCurrentBackgroundColor(current_color) {
-        if (this.background_color == current_color) {
+      isCurrentBackgroundColor(currentColor) {
+        if (this.backgroundColor == currentColor) {
           return true
         } else {
           return false

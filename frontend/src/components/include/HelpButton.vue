@@ -6,7 +6,8 @@
         <template v-slot:activator="{ on: tooltip }">
           <v-btn 
             icon
-            v-on="{ ...tooltip, ...menu }">
+            v-on="{ ...tooltip, ...menu }"
+            v-show="$viewport .width > 450">
             <v-icon>mdi-help-circle</v-icon>
           </v-btn>
         </template>
@@ -17,7 +18,7 @@
 
     <v-list>
       <v-list-item
-        v-for="(item, index) in help_items"
+        v-for="(item, index) in items"
         :key="index"
         @click="">
         <v-list-item-icon>
@@ -34,7 +35,7 @@
   export default {
     data() {
       return {
-        help_items: [
+        items: [
           { name: 'Take a tour', icon: 'mdi-star'},
           { name: 'Report a problem', icon: 'mdi-message-alert'},
           { name: 'Help Center', icon: 'mdi-help-circle'},

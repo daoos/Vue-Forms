@@ -1,16 +1,31 @@
 <template>
 	<div>
    <v-row>
-    <v-col cols="1">
+    <v-col 
+      cols="2" 
+      xl="1" 
+      lg="1" 
+      md="1" 
+      sm="1">
       <v-select 
         :items="min"
         :label="selectedMin">
       </v-select>
     </v-col>
-    <v-col cols="1">
+    <v-col 
+      cols="2" 
+      xl="1" 
+      lg="1" 
+      md="1" 
+      sm="1">
       <div class="to">to</div>
     </v-col>
-    <v-col cols="1">
+    <v-col 
+      cols="2"
+      xl="1" 
+      lg="1" 
+      md="1" 
+      sm="1">
       <v-select 
         :items="max"
         :label="selectedMax">
@@ -18,17 +33,17 @@
     </v-col>
    </v-row>
    <v-row>
-    <v-col cols="3">
+    <v-col cols="8" xl="3" lg="3" md="3" sm="3">
       <v-text-field 
-        :color="theme_color"
+        :color="themeColor"
         placeholder="Label (optional)">
       </v-text-field>
     </v-col>
    </v-row>
    <v-row>
-    <v-col cols="3">
+    <v-col cols="8" xl="3" lg="3" md="3" sm="3">
       <v-text-field 
-        :color="theme_color"
+        :color="themeColor"
         placeholder="Label (optional)">
       </v-text-field>
     </v-col>
@@ -38,7 +53,7 @@
 
 <script>
 	export default {
-    props: ["theme_color"],
+    props: ["themeColor"],
     data() {
       return {
         selectedMin: "1",

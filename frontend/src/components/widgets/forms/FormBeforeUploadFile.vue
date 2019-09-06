@@ -12,7 +12,7 @@
       </v-btn>
       <v-btn
         text
-        :color="theme_color"
+        :color="themeColor"
         @click="advanceToFormFile">
         CONTINUE
       </v-btn>
@@ -22,7 +22,7 @@
 
 <script>
 	export default {
-    props: ["theme_color"],
+    props: ["themeColor"],
     methods: {
       cancelFormFile() {
         this.$emit('cancelFormFile')

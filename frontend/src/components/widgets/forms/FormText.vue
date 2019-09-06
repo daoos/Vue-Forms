@@ -1,9 +1,14 @@
 <template>
 	<div>
    <v-row>
-    <v-col :cols="getCols">
+    <v-col 
+      :cols="getXsCols" 
+      :xl="getOtherCols"
+      :lg="getOtherCols"
+      :md="getOtherCols"
+      :sm="getOtherCols">
       <v-text-field 
-        :color="theme_color"
+        :color="themeColor"
         :placeholder="getPlaceHolder"
         :append-icon="getAppendIcon"
         disabled>
@@ -17,22 +22,32 @@
 	export default {
     props: [
       "question",
-      "theme_color",
+      "themeColor",
       ],
     computed: {
-      getCols() {
-        switch(this.question.question_format) {
-          case 'Short answer':
-            return '6'
+      getXsCols() {
+        switch(this.question.questionFormat) {
           case 'Paragraph':
             return '10'
+          case 'Short answer':
+          case 'Date':
+          case 'Time':
+            return '8'
+        }
+      },
+      getOtherCols() {
+        switch(this.question.questionFormat) {
+          case 'Paragraph':
+            return '10'
+          case 'Short answer':
+            return '6'
           case 'Date':
           case 'Time':
             return '4'
         }
       },
       getPlaceHolder() {
-        switch(this.question.question_format) {
+        switch(this.question.questionFormat) {
           case 'Short answer':
             return 'Short answer text'
           case 'Paragraph':
@@ -44,7 +59,7 @@
         }        
       },
       getAppendIcon() {
-        switch(this.question.question_format) {
+        switch(this.question.questionFormat) {
           case 'Date':
             return 'mdi-calendar-range'
           case 'Time':

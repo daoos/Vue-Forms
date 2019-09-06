@@ -1,27 +1,37 @@
 <template>
 	<div>
 		<v-row>
-      <v-col cols="6">
+      <v-col 
+        cols="12" 
+        xl="6" 
+        lg="6"
+        md="6" 
+        sm="6">
         <div>Rows</div>
           <div v-for="(row, index) in numberOfRows">
             <v-text-field 
-              :color="theme_color"
+              :color="themeColor"
               :append-outer-icon="numberOfRows >= 2 ? 'mdi-window-close' : undefined"
               @click:append-outer="deleteRow(index)"
               v-model="question.rows[index].row">
             </v-text-field>
           </div>
           <v-text-field 
-            :color="theme_color"
+            :color="themeColor"
             placeholder="Add row"
             @click="addRow">
           </v-text-field>
       </v-col>
-      <v-col cols="6">
+      <v-col 
+        cols="12" 
+        xl="6" 
+        lg="6" 
+        md="6" 
+        sm="6">
         <div>Columns</div>
           <div v-for="(col, index) in numberOfColumns">
             <v-text-field
-              :color="theme_color"
+              :color="themeColor"
               :prepend-icon="getPrependIcon"
               :append-outer-icon="numberOfColumns >= 2 ? 'mdi-window-close' : undefined"
               @click:append-outer="deleteColumn(index)"
@@ -29,7 +39,7 @@
             </v-text-field>
           </div>
           <v-text-field 
-            :color="theme_color"
+            :color="themeColor"
             :prepend-icon="getPrependIcon"
             placeholder="Add column"
             @click="addColumn">
@@ -43,7 +53,7 @@
   export default {
     props: [
       "question",
-      "theme_color",
+      "themeColor",
       ],
     data() {
       return {
@@ -53,7 +63,7 @@
     },
     computed: {
       getPrependIcon() {
-        switch (this.question.question_format) {
+        switch (this.question.questionFormat) {
           case 'Multiple choice grid':
             return 'mdi-circle-outline'
           case 'Checkbox grid':
@@ -66,17 +76,17 @@
         this.numberOfRows += 1
         this.$emit('addRow')
       },
-      deleteRow(row_index) {
+      deleteRow(rowIndex) {
         this.numberOfRows -= 1
-        this.$emit('deleteRow', row_index)
+        this.$emit('deleteRow', rowIndex)
       },
       addColumn() {
         this.numberOfColumns += 1
         this.$emit('addColumn')
       },
-      deleteColumn(col_index) {
+      deleteColumn(colIndex) {
         this.numberOfColumns -= 1
-        this.$emit('deleteColumn', col_index)
+        this.$emit('deleteColumn', colIndex)
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app-bar
-      :color="theme_color"
+      :color="themeColor"
       flat
       dark
       >
@@ -23,7 +23,8 @@
         <template v-slot:activator="{ on }">
           <v-btn 
             icon
-            v-on="on">
+            v-on="on"
+            v-show="$viewport .width > 450">
             <v-icon>mdi-folder</v-icon>
           </v-btn>
         </template>
@@ -34,8 +35,11 @@
         <template v-slot:activator="{ on }">
           <v-btn 
             icon
-            v-on="on">
-            <v-icon @click="starForm">{{ getStarIcon }}</v-icon>
+            v-on="on"
+            v-show="$viewport .width > 450">
+            <v-icon @click="isStarred ? isStarred = false : isStarred = true">
+              {{ isStarred ? 'mdi-star' : 'mdi-star-outline' }}
+            </v-icon>
           </v-btn>
         </template>
         <span class="tooltip">Star</span>
@@ -46,7 +50,8 @@
           <span
             class="font-italic caption" 
             style="color: #D1C4E9"
-            v-on="on">
+            v-on="on"
+            v-show="$viewport .width > 450">
             All changes saved in Drive
           </span>
         </template>
@@ -71,16 +76,17 @@
         <template v-slot:activator="{ on }">
           <v-btn 
             icon
-            v-on="on">
+            v-on="on"
+            v-show="$viewport .width > 450">
             <v-icon>mdi-eye</v-icon>
           </v-btn>
         </template>
         <span class="tooltip">Preview</span>
       </v-tooltip>
 
-      <DialogSettings :theme_color="theme_color" />
+      <DialogSettings :themeColor="themeColor" />
 
-      <DialogSend :theme_color="theme_color" />
+      <DialogSend :themeColor="themeColor" />
 
       <v-menu
         left
@@ -145,41 +151,25 @@
     },
     data() {
       return {
-          options: [
-            { name: 'Undo', icon: 'mdi-undo'},
-            { name: 'Make a copy', icon: 'mdi-content-copy' },
-            { name: 'Move to trash', icon: 'mdi-delete' },
-            { name: 'Get pre-filled link', icon: 'mdi-link' },
-            { name: 'Print', icon: 'mdi-printer' },
-            { name: 'Add collaborators', icon: 'mdi-account-multiple-plus' },
-            { name: 'Script editor', icon: 'mdi-code-tags' },
-            { name: 'Add-ons', icon: 'mdi-puzzle' },
-            { name: 'Preferences', icon: 'mdi-account-settings' },
-          ],
-          is_starred: false,
-          drawer: false,
-          theme_color: 'deep-purple darken-1',
-        }
-      },
-    computed: {
-      getStarIcon() {
-        if (this.is_starred) {
-          return 'mdi-star'
-        } else {
-          return 'mdi-star-outline'
-        }
+        options: [
+          { name: 'Undo', icon: 'mdi-undo'},
+          { name: 'Make a copy', icon: 'mdi-content-copy' },
+          { name: 'Move to trash', icon: 'mdi-delete' },
+          { name: 'Get pre-filled link', icon: 'mdi-link' },
+          { name: 'Print', icon: 'mdi-printer' },
+          { name: 'Add collaborators', icon: 'mdi-account-multiple-plus' },
+          { name: 'Script editor', icon: 'mdi-code-tags' },
+          { name: 'Add-ons', icon: 'mdi-puzzle' },
+          { name: 'Preferences', icon: 'mdi-account-settings' },
+        ],
+        isStarred: false,
+        drawer: false,
+        themeColor: 'deep-purple darken-1',
       }
     },
     methods: {
-      starForm() {
-        if (this.is_starred) {
-          this.is_starred = false
-        } else {
-          this.is_starred = true
-        }
-      },
       changeThemeColor(args) {
-        this.theme_color = args
+        this.themeColor = args
         this.$emit('changeThemeColor', args)
       },
       changeBackgroundColor(args) {

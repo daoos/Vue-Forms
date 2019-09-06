@@ -1,13 +1,14 @@
 <template>
 	<v-dialog
     max-width="600px"
-    v-model="spreadsheet_dialog">
-    <template v-slot:activator="{ on: spreadsheet_dialog }">
+    v-model="dialog"
+    :fullscreen="$viewport.width < 450">
+    <template v-slot:activator="{ on: dialog }">
       <v-tooltip left>
         <template v-slot:activator="{ on: tooltip }">
           <v-btn
             icon
-            v-on="{ ...tooltip, ...spreadsheet_dialog }">
+            v-on="{ ...tooltip, ...dialog }">
             <v-icon color="green darken-1">mdi-google-spreadsheet</v-icon>
           </v-btn>
         </template>
@@ -15,39 +16,56 @@
       </v-tooltip>
     </template>
     <v-card tile>
-      <v-card-title v-bind:style="{ backgroundColor: theme_color_list[theme_color] }">
+      <v-card-title v-bind:style="{ backgroundColor: themeColorList[themeColor] }">
         <span class="headline font-weight-medium dialog-title">Select response destination</span>
         <div class="flex-grow-1"></div>
         <v-btn 
           icon
-          @click="spreadsheet_dialog = false">
+          @click="dialog = false">
           <v-icon color="white">mdi-close</v-icon>
         </v-btn>
       </v-card-title>
       <v-card-text class="text--primary">
         <v-row>
-          <v-col cols="6">
+          <v-col 
+            cols="12" 
+            xl="6" 
+            lg="6" 
+            md="6" 
+            sm="6">
             <v-radio-group v-model="active">
               <v-radio 
                 label="Create a new spreadsheet"
                 :value="true"
-                :color="theme_color">
+                :color="themeColor">
               </v-radio>
               <v-radio 
                 label="Select existing spreadsheet"
                 :value="false"
-                :color="theme_color">
+                :color="themeColor">
               </v-radio>
             </v-radio-group>
           </v-col>
-          <v-col cols="4">
+          <v-col 
+            cols="8" 
+            xl="4" 
+            lg="4" 
+            md="4" 
+            sm="4">
             <v-text-field
-              :color="theme_color"
+              :color="themeColor"
               value="Untitle form (Reponses)">
             </v-text-field>
           </v-col>
-          <v-col cols="2">
-            <a href="">Learn more</a>
+          <v-col 
+            cols="4" 
+            xl="2" 
+            lg="2" 
+            md="2" 
+            sm="2">
+            <div class="link-container">
+              <a href="">Learn more</a>
+            </div>
           </v-col>
         </v-row>
       </v-card-text>
@@ -55,11 +73,11 @@
         <div class="flex-grow-1"></div>
         <v-btn 
           text
-          @click="spreadsheet_dialog = false">CANCEL</v-btn>
+          @click="dialog = false">CANCEL</v-btn>
         <v-btn 
-          :color="theme_color" 
+          :color="themeColor" 
           text
-          @click="spreadsheet_dialog = false">{{ active ? 'CRAETE' : 'SELECT' }}</v-btn>
+          @click="dialog = false">{{ active ? 'CRAETE' : 'SELECT' }}</v-btn>
       </v-card-actions> 
     </v-card>
   </v-dialog>
@@ -67,12 +85,12 @@
 
 <script>
   export default {
-    props: ["theme_color"],
+    props: ["themeColor"],
     data() {
       return {
-        spreadsheet_dialog: false,
+        dialog: false,
         active: true,
-        theme_color_list: {
+        themeColorList: {
           'red darken-1': '#E53935',
           'deep-purple darken-1': '#5E35B1',
           'indigo darken-1': '#3949AB',
@@ -94,5 +112,9 @@
 <style scoped>
   .dialog-title {
     color: #FFFFFF;
+  }
+
+  .link-container {
+    padding-top: 25px;
   }
 </style>

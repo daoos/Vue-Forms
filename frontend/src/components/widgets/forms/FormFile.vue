@@ -17,11 +17,11 @@
           md="2" 
           sm="2">
           <v-switch
-            v-model="switch_1" 
+            v-model="question.isSpecificFileAllowed" 
             :color="themeColor"></v-switch>
         </v-col>
       </v-row>
-      <v-row v-show="switch_1">
+      <v-row v-show="question.isSpecificFileAllowed">
         <v-col 
           cols="6" 
           xl="3" 
@@ -65,10 +65,10 @@
           md="2" 
           sm="2">
           <v-select 
-            v-model="numberOfFiles"
+            v-model="question.numberOfFiles"
             :items="maximumNumberOfFiles"
-            :item-text="numberOfFiles"
-            :item-value="numberOfFiles"></v-select>
+            :item-text="question.numberOfFiles"
+            :item-value="question.numberOfFiles"></v-select>
         </v-col>
       </v-row>
       <v-row>
@@ -87,10 +87,10 @@
           md="2" 
           sm="2">
           <v-select 
-            v-model="fileSize"
+            v-model="question.fileSize"
             :items="maximumFileSize"
-            :item-text="fileSize"
-            :item-value="fileSize"></v-select>
+            :item-text="question.fileSize"
+            :item-value="question.fileSize"></v-select>
         </v-col>
       </v-row>
       <v-row>
@@ -118,15 +118,13 @@
 <script>
   export default {
     props: [
+      "question",
       "questionIndex",
       "themeColor",
       "focusedFormIndex",
       ],
     data() {
       return {
-        switch_1: false,
-        numberOfFiles: '1',
-        fileSize: '10MB',
         maximumNumberOfFiles: ['1', '5', '10'],
         maximumFileSize: ['1MB', '10MB', '100MB', '1GB', '10GB'],
         items1: ['Document', 'Spreadsheet', 'PDF', 'Video'],

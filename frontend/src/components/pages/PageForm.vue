@@ -151,6 +151,7 @@
                       <v-btn
                         class="actions-icon"
                         icon
+                        @click="duplicateQuestion(questionIndex)"
                         v-on="on">
                         <v-icon>mdi-content-copy</v-icon>
                       </v-btn>
@@ -240,6 +241,13 @@
                   option: 'Option1',
                 },
               ],
+              minScale: '1',
+              maxScale: '5',
+              minScaleLabel: '',
+              maxScaleLabel: '',
+              isSpecificFileAllowed: false,
+              numberOfFiles: '1',
+              fileSize: '10MB',
               rows: [
                 {
                   row: 'Row1',
@@ -295,6 +303,13 @@
                   option: 'Option1',
                 },
               ],
+              minScale: '1',
+              maxScale: '5',
+              minScaleLabel: '',
+              maxScaleLabel: '',
+              isSpecificFileAllowed: false,
+              numberOfFiles: '1',
+              fileSize: '10MB',
               rows: [
                 {
                   row: 'Row1',
@@ -308,6 +323,11 @@
             }
         )
         this.focusedFormIndex += 1
+      },
+      duplicateQuestion(questionIndex) {
+        var copiedQuestion = JSON.parse(JSON.stringify(this.question.questions[questionIndex]))
+        this.question.questions.splice(questionIndex + 1, 0 , copiedQuestion)
+        this.focusedFormIndex += 1  // This line doesn't work
       },
       deleteQuestion(questionIndex) {
         this.question.questions.splice(questionIndex, 1)

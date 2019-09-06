@@ -13,12 +13,14 @@
               :color="themeColor"
               :append-outer-icon="numberOfRows >= 2 ? 'mdi-window-close' : undefined"
               @click:append-outer="deleteRow(index)"
+              :disabled="!isFocused"
               v-model="question.rows[index].row">
             </v-text-field>
           </div>
           <v-text-field 
             :color="themeColor"
             placeholder="Add row"
+            v-show="isFocused"
             @click="addRow">
           </v-text-field>
       </v-col>
@@ -35,6 +37,7 @@
               :prepend-icon="getPrependIcon"
               :append-outer-icon="numberOfColumns >= 2 ? 'mdi-window-close' : undefined"
               @click:append-outer="deleteColumn(index)"
+              :disabled="!isFocused"
               v-model="question.cols[index].col">
             </v-text-field>
           </div>
@@ -42,6 +45,7 @@
             :color="themeColor"
             :prepend-icon="getPrependIcon"
             placeholder="Add column"
+            v-show="isFocused"
             @click="addColumn">
           </v-text-field>
       </v-col>
@@ -53,7 +57,9 @@
   export default {
     props: [
       "question",
+      "questionIndex",
       "themeColor",
+      "focusedFormIndex",
       ],
     data() {
       return {
@@ -69,7 +75,14 @@
           case 'Checkbox grid':
             return 'mdi-checkbox-blank-outline'
         }
-      }
+      },
+      isFocused() {
+        if (this.focusedFormIndex == this.questionIndex) {
+          return true
+        } else {
+          return false
+        }
+      },
     },
     methods: {
       addRow() {
@@ -87,7 +100,7 @@
       deleteColumn(colIndex) {
         this.numberOfColumns -= 1
         this.$emit('deleteColumn', colIndex)
-      }
+      },
     }
   }
 </script>
